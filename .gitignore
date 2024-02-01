@@ -1,3 +1,2 @@
-AutoCAD-Translator/
-#node_modules/
+node_modules/
 .env
