@@ -50,7 +50,7 @@ async function getData() {
         },
         body: JSON.stringify(data_text)
     }
-    const resposta = await fetch('/api', options);
+    const resposta = await fetch('https://autocad-translator-server.vercel.app/api', options);
     const json = await resposta.json();
     console.log(json);
 
@@ -69,7 +69,6 @@ async function getData() {
     }
     const lines = data_array_translated.map(innerArray => innerArray.join(';'));
     const outputText = decodeHtmlEntities(lines.join(';\n') + ";");
-    // const translated_text = he.decode(outputText);
 
     // Create a Blob with the JSON data
     const downloadLink = document.getElementById("dl_txt");
