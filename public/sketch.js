@@ -52,6 +52,7 @@ async function getData() {
     }
     const resposta = await fetch('/api', options);
     const json = await resposta.json();
+    console.log(json);
 
     const text_translated_array = [];
     for (let i = 0; i < json.texto.length; i++) {

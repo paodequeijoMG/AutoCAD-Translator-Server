@@ -31,7 +31,7 @@ app.post('/api', async (request, response) => {
                 source_lang: sourceLang,
                 target_lang: targetLang,
                 tag_handling: "html",
-                ignore_tags: ["p", "n", "t"]
+                ignore_tags: ["p", "n", "t", "v"]
             });
 
             // Make a POST request to the DeepL API
