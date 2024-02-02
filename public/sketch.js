@@ -102,7 +102,7 @@ async function getData() {
 function closeBrowser(reference, _url) {
     window.URL.revokeObjectURL(reference);
     Acad.Editor.executeCommand("regen");
-    Acad.Editor.executeCommand("._webload", "_Unload", `"${_url}"`);
+    Acad.Editor.executeCommand("._trdztxt");
 }
 
 function decodeHtmlEntities(html) {
