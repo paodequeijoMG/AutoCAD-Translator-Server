@@ -31,7 +31,6 @@ app.post('/api', async (request, response) => {
                 source_lang: sourceLang,
                 target_lang: targetLang,
                 context: "civil engenerring drawing",
-                formality: "more",
                 preserve_formatting: true,
                 tag_handling: "html"
                 // ignore_tags: ["p", "n", "t", "v"]
