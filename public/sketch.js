@@ -85,7 +85,7 @@ for (let i = 0; i < data_text.length; i++) {
 }
 console.log(api_array);
 
-getData();
+// getData();
 
 async function getData() {
 
