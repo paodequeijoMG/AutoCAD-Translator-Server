@@ -1,57 +1,82 @@
 const data_querry = "dados";
-const containsValidWord = /[\p{L}\s]*[\p{L}]{2,}[\p{L}\s]*/u;
 const fullUrlWithQuery = window.location.origin + "/" + window.location.search;
 const urlParams = new URLSearchParams(window.location.search);
 const arrayString = urlParams.get(data_querry);
 const url = `${window.location.origin}/?${data_querry}=${arrayString}`;
-const text_array_lines = arrayString.split(',');
-text_array_lines.pop();
-
-const text_array_elements = [];
-text_array_lines.forEach(element => {
+let data_array = arrayString.split(',');
+data_array.pop();
+data_array.forEach(element => {
     if (element.length > 1) {
         let element_splited = element.split(";");
         element = element_splited;
     }
 });
-console.log(text_array_lines);
+// console.log(data_array);
 
 
 // text_array
-const text_array = [];
-text_array_lines.forEach(element => text_array.push(element.split(';')));
-text_array.forEach(element => {
-    for (let i = 3; i <= element.length; i += 3) {
-        if (!containsValidWord.test(element[i])) {
-            for (let j = 0; j <= 2; j++) {
-                element[i-j] = "";
-            }
-        }
-    }
-});
-
-// data_array
-const data_array = []; 
-text_array.forEach(element => {
-    const temp_array = element.filter(element => element !== "");
-    (temp_array.length > 1) ? data_array.push(temp_array) : "";
-});
-
-console.log(data_array);
-
-// data_list
 const data_text = [];
-data_array.forEach(element => {
-    for (let i = 3; i < element.length; i += 3) {
-        data_text.push(element[i]);
+for (let i = 0; i < data_array.length; i = i + 2) {
+    data_text[i/2] = {
+        id: data_array[i],
+        text_array: data_array[i+1]
+    }
+}
+data_text.forEach((element, index) => data_text[index].text_array = element.text_array.split(';'));
+data_text.forEach(element => {
+    let str_count = 0;
+    for (let i = 0; i < element.text_array.length; i++) {
+        element.text_array[i] = {
+            index: str_count,
+            text: element.text_array[i]
+        }
+        str_count = str_count + element.text_array[i].text.length;
     }
 });
+console.log(JSON.parse(JSON.stringify(data_text)));
 
+// ----REGEX----
+// PALAVRAS QUE COMEÇAM COM "\" "." "{"
+let regex = /^[\\.\\{]/;
+for (let j = 0; j < data_text.length; j++) {
+    let range = data_text[j].text_array.length - 1;
+    for (let i = range; i >= 0; i--) {
+        let match = regex.test(data_text[j].text_array[i].text);
+        (match) ? data_text[j].text_array.splice(i, 1) : "";
+    }
+}
+console.log(JSON.parse(JSON.stringify(data_text)));
+
+//Palavras sem "/"+texto subsequente
+regex = /\\(?!U)/;
+for (let j = 0; j < data_text.length; j++) {
+    let range = data_text[j].text_array.length - 1;
+    for (let i = range; i >= 0; i--) {
+        let str = data_text[j].text_array[i].text;
+        let match = str.search(regex);
+        (match !== -1) ? data_text[j].text_array[i].text = data_text[j].text_array[i].text.slice(0, match) : "";
+    }
+}
+console.log(JSON.parse(JSON.stringify(data_text)));
+
+// PALAVRAS VALIDAS PARA TRADUÇÃO
+regex = /[\p{L}\s]*[\p{L}]{2,}[\p{L}\s]*/u;
+for (let j = 0; j < data_text.length; j++) {
+    let range = data_text[j].text_array.length - 1;
+    for (let i = range; i >= 0; i--) {
+        let match = regex.test(data_text[j].text_array[i].text);
+        (!match) ? data_text[j].text_array.splice(i, 1) : null;
+    }
+}
+// FILTRAR ARRAYS SEM TEXTO
+for (let i = data_text.length - 1; i > 0; i--) {
+    (data_text[i].text_array.length === 0) ? data_text.splice(i, 1) : null;
+}
 console.log(data_text);
 
-// getData();
+getData(data_text);
 
-async function getData() {
+async function getData(data) {
 
     const options = {
         method: 'POST',
@@ -119,4 +144,14 @@ function decodeHtmlEntities(html) {
     var txt = document.createElement('textarea');
     txt.innerHTML = html;
     return txt.value;
+}
+
+function verificarString(str) {
+    const regex = /^(?!(?:\\{3})).*?(\\\\)/;
+    const match = str.match(regex);
+    if (match && match.index > 2) {
+        return [true, match.index];
+    } else {
+        return false;
+    }
 }
