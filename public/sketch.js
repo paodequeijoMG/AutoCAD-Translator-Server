@@ -84,18 +84,19 @@ for (let i = 0; i < data_text.length; i++) {
 }
 console.log(api_array);
 
-getData(api_array);
+getData();
 
-async function getData(data) {
+async function getData() {
 
     const options = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(api_array)
     }
-    const resposta = await fetch('https://autocad-translator-server.vercel.app', options);
+    const url_lh = new URL("https://autocad-translator-server.vercel.app/");
+    const resposta = await fetch(url_lh, options);
     const json = await resposta.json();
     console.log(json);
 
@@ -154,14 +155,4 @@ function decodeHtmlEntities(html) {
     var txt = document.createElement('textarea');
     txt.innerHTML = html;
     return txt.value;
-}
-
-function verificarString(str) {
-    const regex = /^(?!(?:\\{3})).*?(\\\\)/;
-    const match = str.match(regex);
-    if (match && match.index > 2) {
-        return [true, match.index];
-    } else {
-        return false;
-    }
 }

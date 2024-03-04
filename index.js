@@ -3,6 +3,8 @@ const express = require('express');
 const app = express();
 const axios = require('axios');
 const querystring = require('querystring');
+const cors = require("cors")
+app.use(cors())
 const port = process.env.PORT || 5355;
 require('dotenv').config();
 
