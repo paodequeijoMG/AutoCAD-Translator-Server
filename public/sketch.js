@@ -6,12 +6,13 @@ const url = `${window.location.origin}/?${data_querry}=${arrayString}`;
 let data_array = arrayString.split(',');
 data_array.pop();
 data_array.forEach(element => {
+    console.log("ola");
     if (element.length > 1) {
         let element_splited = element.split(";");
         element = element_splited;
     }
 });
-// console.log(data_array);
+console.log(data_array);
 
 
 // text_array
@@ -22,6 +23,7 @@ for (let i = 0; i < data_array.length; i = i + 2) {
         text_array: data_array[i+1]
     }
 }
+console.log(data_text);
 data_text.forEach((element, index) => data_text[index].text_array = element.text_array.split(';'));
 data_text.forEach(element => {
     let str_count = 0;
@@ -95,8 +97,8 @@ async function getData() {
         },
         body: JSON.stringify(api_array)
     }
-    const url_lh = new URL("https://autocad-translator-server.vercel.app/");
-    const resposta = await fetch(url_lh, options);
+    // const url_lh = new URL("https://autocad-translator-server.vercel.app/");
+    const resposta = await fetch("/api", options);
     const json = await resposta.json();
     console.log(json);
 

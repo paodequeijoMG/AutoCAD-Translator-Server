@@ -3,8 +3,6 @@ const express = require('express');
 const app = express();
 const axios = require('axios');
 const querystring = require('querystring');
-const cors = require("cors")
-app.use(cors())
 const port = process.env.PORT || 5355;
 require('dotenv').config();
 
@@ -12,11 +10,11 @@ app.listen(port, () => console.log(`Escutando na porta ${port}`));
 app.use(express.static('public'));
 app.use(express.json({ limit: '1mb'}));
 
-app.post('/public', async (request, response) => {
+app.post('/api', async (request, response) => {
     console.log('I got a request!');
     const data = request.body;
     console.log(data);
-//TRADUTOR API
+    //TRADUTOR API
     // Replace [yourAuthKey] with your actual DeepL API authorization key
     const deepLAuthKey = process.env.API_KEY;
 
