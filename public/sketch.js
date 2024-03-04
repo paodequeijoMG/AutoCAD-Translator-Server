@@ -74,7 +74,17 @@ for (let i = data_text.length - 1; i > 0; i--) {
 }
 console.log(data_text);
 
-getData(data_text);
+const api_array = [];
+for (let i = 0; i < data_text.length; i++) {
+    let sub_array = [];
+    for (let j = 0; j < data_text[i].text_array.length; j++) {
+        sub_array.push(data_text[i].text_array[j].text);
+    }
+    api_array.push(sub_array);
+}
+console.log(api_array);
+
+getData(api_array);
 
 async function getData(data) {
 
@@ -83,7 +93,7 @@ async function getData(data) {
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(data_text)
+        body: JSON.stringify(data)
     }
     const resposta = await fetch('https://autocad-translator-server.vercel.app/api', options);
     const json = await resposta.json();
