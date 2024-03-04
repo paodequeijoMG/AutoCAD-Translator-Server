@@ -1,0 +1,37 @@
+:root {
+    --a_item_height: 0px;
+  }
+
+.language_list_tab {
+  height: calc(var(--a_item_height) * 8);
+  border-radius: var(--bs-border-radius);
+  border: solid 2px;
+}
+
+/* .language_list_tab > label:first-of-type, .language_list_tab > label:last-of-type{
+  border-radius: none;
+} */
+
+/* For WebKit browsers */
+::-webkit-scrollbar {
+  width: 12px; 
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 0px var(--bs-border-radius) var(--bs-border-radius) 0px;
+  margin: 2px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #0d6efd; 
+  border-radius: var(--bs-border-radius);
+  margin: 2px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

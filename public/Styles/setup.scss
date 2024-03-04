@@ -1,0 +1,6 @@
+// @import 'bootstrap';
+@import 'variables';
+
+.list-group {
+    @extend .list-group-item;
+}   

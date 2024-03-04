@@ -10,7 +10,7 @@ app.listen(port, () => console.log(`Escutando na porta ${port}`));
 app.use(express.static('public'));
 app.use(express.json({ limit: '1mb'}));
 
-app.post('/api', async (request, response) => {
+app.post('/public', async (request, response) => {
     console.log('I got a request!');
     const data = request.body;
     console.log(data);
@@ -33,7 +33,6 @@ app.post('/api', async (request, response) => {
                 context: "civil engineering drawing",
                 preserve_formatting: true,
                 tag_handling: "html"
-                // ignore_tags: ["p", "n", "t", "v"]
             });
 
             // Make a POST request to the DeepL API
@@ -74,4 +73,3 @@ app.post('/api', async (request, response) => {
         });
     }
 });
-

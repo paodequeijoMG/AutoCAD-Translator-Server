@@ -6,25 +6,27 @@
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://df-prod.autocad360.com/jsapi/v4/Autodesk.AutoCAD.js"></script>
+    <link rel="stylesheet" href="setup.css">
 </head>
 <body>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="setup.html">Setup</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="Modifiers.html">Modifiers</a>
+        </li>
+    </ul>
     <div class="container text-center" >
         <div class="row">
             <div class="col pb-3">
                 <div class="text-start">Source Language:</div>
-                <div class="list-group" id="list-tab" role="tablist">
-                    <a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">Portuguese</a>
-                    <a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" href="#list-profile" role="tab" aria-controls="list-profile">Spanish</a>
-                    <a class="list-group-item list-group-item-action" id="list-messages-list" data-bs-toggle="list" href="#list-messages" role="tab" aria-controls="list-messages">English</a>
-                </div>
+                <div class="d-grid bnt-group language_list_tab overflow-auto" id="src_language_tab" role="group" aria-label="Basic radio toggle button group"></div>
             </div>
-            <div class="col">
+            <div class="col pb-3">
                 <div class="text-start">Target Language:</div>
-                <div class="list-group" id="list-tab" role="tablist">
-                    <a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">Portuguese</a>
-                    <a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" href="#list-profile" role="tab" aria-controls="list-profile">Spanish</a>
-                    <a class="list-group-item list-group-item-action" id="list-messages-list" data-bs-toggle="list" href="#list-messages" role="tab" aria-controls="list-messages">English</a>
-                </div>
+                <div class="list-group language_list_tab overflow-auto" id="trg_language_tab" role="tablist"></div>
             </div>
         </div>
         <div class="row align-items-center">
@@ -33,11 +35,11 @@
                     <div class="col">
                         <ul class="list-group">
                             <li class="list-group-item">
-                                <input class="form-check-input me-1" type="checkbox" value="" id="1CheckboxStretched">
+                                <input class="form-check-input me-1 obj_type" type="checkbox" value="TEXT" checked="True" id="1CheckboxStretched">
                                 <label class="form-check-label stretched-link" for="1CheckboxStretched">Text</label>
                             </li>
                             <li class="list-group-item">
-                                <input class="form-check-input me-1" type="checkbox" value="" id="2CheckboxStretched">
+                                <input class="form-check-input me-1 obj_type" type="checkbox" value="MTEXT" checked="True" id="2CheckboxStretched">
                                 <label class="form-check-label stretched-link" for="2CheckboxStretched">Mtext</label>
                             </li>
                         </ul>
@@ -45,11 +47,11 @@
                     <div class="col">
                         <ul class="list-group">
                             <li class="list-group-item">
-                                <input class="form-check-input me-1" type="checkbox" value="" id="3CheckboxStretched">
+                                <input class="form-check-input me-1 obj_type" type="checkbox" value="LEADER" checked="True" id="3CheckboxStretched">
                                 <label class="form-check-label stretched-link" for="3CheckboxStretched">Leader</label>
                             </li>
                             <li class="list-group-item">
-                                <input class="form-check-input me-1" type="checkbox" value="" id="4CheckboxStretched">
+                                <input class="form-check-input me-1 obj_type" type="checkbox" value="MLEADER" checked="True" id="4CheckboxStretched">
                                 <label class="form-check-label stretched-link" for="4CheckboxStretched">Mleader</label>
                             </li>
                         </ul>
@@ -57,10 +59,11 @@
                 </div>
             </div>
             <div class="col">
-                    <button class="btn btn-primary btn-lg" type="button">Save</button>
+                    <button class="btn btn-primary btn-lg" type="button" onclick=SaveState()>Save</button>
                     <button class="btn btn-primary btn-lg" type="button">Exit</button>
             </div>
         </div>
-      </div>
+    </div>
 </body>
+<script src="setup.js"></script>
 </html>

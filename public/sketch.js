@@ -7,6 +7,16 @@ const url = `${window.location.origin}/?${data_querry}=${arrayString}`;
 const text_array_lines = arrayString.split(',');
 text_array_lines.pop();
 
+const text_array_elements = [];
+text_array_lines.forEach(element => {
+    if (element.length > 1) {
+        let element_splited = element.split(";");
+        element = element_splited;
+    }
+});
+console.log(text_array_lines);
+
+
 // text_array
 const text_array = [];
 text_array_lines.forEach(element => text_array.push(element.split(';')));
@@ -39,7 +49,7 @@ data_array.forEach(element => {
 
 console.log(data_text);
 
-getData();
+// getData();
 
 async function getData() {
 
