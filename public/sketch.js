@@ -13,7 +13,6 @@ data_array.forEach(element => {
 });
 console.log(data_array);
 
-
 // text_array
 const data_text = [];
 for (let i = 0; i < data_array.length; i = i + 2) {
@@ -85,47 +84,57 @@ for (let i = 0; i < data_text.length; i++) {
 }
 console.log(api_array);
 
-
-async function getData() {
-
-    const options = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(api_array)
-    }
-    const resposta = await fetch("/api", options);
-    const json = await resposta.json();
-    console.log(json);
-
-    const text_translated_array = [];
-    for (let i = 0; i < json.texto.length; i++) {
-        text_translated_array.push(json.texto[i].text)
-    }
-
-    const data_array_translated = data_array.map(innerArray => [...innerArray]);;
-    let index = 0;
-    for (let i = 0; i < data_array.length; i++) {
-        for (let j = 3; j < data_array[i].length; j += 3) {
-            data_array_translated[i][j] = text_translated_array[index];
-            index++;
-        }
-    }
-    const lines = data_array_translated.map(innerArray => innerArray.join(';'));
-    const outputText = decodeHtmlEntities(lines.join(';\n') + ";");
+const dados = {a:"aa", b:"bb"};
+const options = {
+    method: 'POST',
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify(dados)
 }
+fetch("/api", options);
 
-function closeBrowser(reference, _url) {
-    window.URL.revokeObjectURL(reference);
-    Acad.Editor.executeCommand("regen");
-    Acad.Editor.executeCommand("._trdztxt");
-}
 
-function decodeHtmlEntities(html) {
-    var txt = document.createElement('textarea');
-    txt.innerHTML = html;
-    return txt.value;
-}
+// async function getData() {
 
-getData();
+//     const options = {
+//         method: 'POST',
+//         headers: {
+//             "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(api_array)
+//     }
+//     const resposta = await fetch("/api", options);
+//     const json = await resposta.json();
+//     console.log(json);
+
+//     const text_translated_array = [];
+//     for (let i = 0; i < json.texto.length; i++) {
+//         text_translated_array.push(json.texto[i].text)
+//     }
+
+//     const data_array_translated = data_array.map(innerArray => [...innerArray]);;
+//     let index = 0;
+//     for (let i = 0; i < data_array.length; i++) {
+//         for (let j = 3; j < data_array[i].length; j += 3) {
+//             data_array_translated[i][j] = text_translated_array[index];
+//             index++;
+//         }
+//     }
+//     const lines = data_array_translated.map(innerArray => innerArray.join(';'));
+//     const outputText = decodeHtmlEntities(lines.join(';\n') + ";");
+// }
+
+// function closeBrowser(reference, _url) {
+//     window.URL.revokeObjectURL(reference);
+//     Acad.Editor.executeCommand("regen");
+//     Acad.Editor.executeCommand("._trdztxt");
+// }
+
+// function decodeHtmlEntities(html) {
+//     var txt = document.createElement('textarea');
+//     txt.innerHTML = html;
+//     return txt.value;
+// }
+
+// getData();
