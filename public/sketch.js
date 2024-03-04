@@ -115,34 +115,6 @@ async function getData() {
     }
     const lines = data_array_translated.map(innerArray => innerArray.join(';'));
     const outputText = decodeHtmlEntities(lines.join(';\n') + ";");
-
-    // Create a Blob with the JSON data
-    const downloadLink = document.getElementById("dl_txt");
-    const text_blob = new Blob([outputText], { type: 'text/plain' });
-    
-    // Set the download link attributes
-    downloadLink.href = window.URL.createObjectURL(text_blob);
-    downloadLink.download = 'api_response.txt';
-    downloadLink.style.display = 'none';
-
-    // Add an event listener to execute callback function when download is complete
-    downloadLink.addEventListener('click', function() {
-        // Ensure that the download is completed before calling callback
-        if (downloadLink.href.startsWith('blob:')) {
-            // Execute the callback function after a short delay (adjust the delay as needed)
-            setTimeout(function() {
-                // Assuming that Acad is globally accessible (replace with the actual global object)
-                if (Acad && Acad.Editor) {
-                    closeBrowser(downloadLink.href, url);
-                } else {
-                    console.error('Acad or Acad.Editor is not accessible. Unable to execute callback.');
-                }
-            }, 1000);
-        }
-    });
-
-    // Trigger a click on the link to initiate the download
-    downloadLink.click();
 }
 
 function closeBrowser(reference, _url) {
