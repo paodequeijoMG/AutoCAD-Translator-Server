@@ -85,7 +85,6 @@ for (let i = 0; i < data_text.length; i++) {
 }
 console.log(api_array);
 
-getData();
 
 async function getData() {
 
@@ -128,3 +127,5 @@ function decodeHtmlEntities(html) {
     txt.innerHTML = html;
     return txt.value;
 }
+
+getData();
