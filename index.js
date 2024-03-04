@@ -10,7 +10,7 @@ app.listen(port, () => console.log(`Escutando na porta ${port}`));
 app.use(express.static('public'));
 app.use(express.json({ limit: '1mb'}));
 
-app.post('/', async (request, response) => {
+app.post('/public/servidor.html', async (request, response) => {
     console.log('I got a request!');
     const data = request.body;
     console.log(data);

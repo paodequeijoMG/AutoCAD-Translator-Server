@@ -97,7 +97,7 @@ async function getData() {
         body: JSON.stringify(api_array)
     }
     // const url_lh = new URL("https://autocad-translator-server.vercel.app/");
-    const resposta = await fetch("/", options);
+    const resposta = await fetch("servidor.html", options);
     const json = await resposta.json();
     console.log(json);
 
