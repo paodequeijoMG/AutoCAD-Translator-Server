@@ -82,59 +82,52 @@ for (let i = 0; i < data_text.length; i++) {
     }
     api_array.push(sub_array);
 }
-console.log(api_array);
 
-const dados = {a:"aa", b:"bb"};
-const options = {
-    method: 'POST',
-    headers: {
-        "Content-Type": "application/json",
-    },
-    body: JSON.stringify(dados)
+const api_flatten = api_array.flat();
+console.log(api_flatten);
+
+getData(api_flatten);
+
+async function getData(dado) {
+
+    const options = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dado)
+    }
+    const resposta = await fetch("/api", options);
+    const json = await resposta.json();
+    console.log(json);
+
+    const text_translated_array = [];
+    for (let i = 0; i < json.texto.length; i++) {
+        text_translated_array.push(json.texto[i].text)
+    }
+
+    const data_array_translated = data_array.map(innerArray => [...innerArray]);;
+    let index = 0;
+    for (let i = 0; i < data_array.length; i++) {
+        for (let j = 3; j < data_array[i].length; j += 3) {
+            data_array_translated[i][j] = text_translated_array[index];
+            index++;
+        }
+    }
+    const lines = data_array_translated.map(innerArray => innerArray.join(';'));
+    const outputText = decodeHtmlEntities(lines.join(';\n') + ";");
 }
-fetch("/api", options);
+
+function closeBrowser(reference, _url) {
+    window.URL.revokeObjectURL(reference);
+    Acad.Editor.executeCommand("regen");
+    Acad.Editor.executeCommand("._trdztxt");
+}
+
+function decodeHtmlEntities(html) {
+    var txt = document.createElement('textarea');
+    txt.innerHTML = html;
+    return txt.value;
+}
 
 
-// async function getData() {
-
-//     const options = {
-//         method: 'POST',
-//         headers: {
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(api_array)
-//     }
-//     const resposta = await fetch("/api", options);
-//     const json = await resposta.json();
-//     console.log(json);
-
-//     const text_translated_array = [];
-//     for (let i = 0; i < json.texto.length; i++) {
-//         text_translated_array.push(json.texto[i].text)
-//     }
-
-//     const data_array_translated = data_array.map(innerArray => [...innerArray]);;
-//     let index = 0;
-//     for (let i = 0; i < data_array.length; i++) {
-//         for (let j = 3; j < data_array[i].length; j += 3) {
-//             data_array_translated[i][j] = text_translated_array[index];
-//             index++;
-//         }
-//     }
-//     const lines = data_array_translated.map(innerArray => innerArray.join(';'));
-//     const outputText = decodeHtmlEntities(lines.join(';\n') + ";");
-// }
-
-// function closeBrowser(reference, _url) {
-//     window.URL.revokeObjectURL(reference);
-//     Acad.Editor.executeCommand("regen");
-//     Acad.Editor.executeCommand("._trdztxt");
-// }
-
-// function decodeHtmlEntities(html) {
-//     var txt = document.createElement('textarea');
-//     txt.innerHTML = html;
-//     return txt.value;
-// }
-
-// getData();
