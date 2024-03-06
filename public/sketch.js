@@ -21,13 +21,15 @@ for (let i = 0; i < data_array.length; i = i + 2) {
         text_array: data_array[i+1]
     }
 }
+
 console.log(data_text);
 data_text.forEach((element, index) => data_text[index].text_array = element.text_array.split(';'));
 data_text.forEach(element => {
     let str_count = 0;
     for (let i = 0; i < element.text_array.length; i++) {
         element.text_array[i] = {
-            index: str_count,
+            index_i: str_count,
+            // index_f: str_count + element.text_array[i].text.length;
             text: element.text_array[i]
         }
         str_count = str_count + element.text_array[i].text.length;
@@ -78,6 +80,7 @@ const api_array = [];
 for (let i = 0; i < data_text.length; i++) {
     let sub_array = [];
     for (let j = 0; j < data_text[i].text_array.length; j++) {
+        // sub_array.push(data_text[i].text_array[j].index);
         sub_array.push(data_text[i].text_array[j].text);
     }
     api_array.push(sub_array);
@@ -86,9 +89,9 @@ for (let i = 0; i < data_text.length; i++) {
 const api_flatten = api_array.flat();
 console.log(api_flatten);
 
-getData(api_flatten);
+getData(api_flatten, data_text);
 
-async function getData(dado) {
+async function getData(dado, array) {
 
     const options = {
         method: 'POST',
@@ -98,24 +101,16 @@ async function getData(dado) {
         body: JSON.stringify(dado)
     }
     const resposta = await fetch("/api", options);
-    const json = await resposta.json();
+    const json = await resposta.json()
     console.log(json);
-
-    const text_translated_array = [];
-    for (let i = 0; i < json.texto.length; i++) {
-        text_translated_array.push(json.texto[i].text)
-    }
-
-    const data_array_translated = data_array.map(innerArray => [...innerArray]);;
-    let index = 0;
-    for (let i = 0; i < data_array.length; i++) {
-        for (let j = 3; j < data_array[i].length; j += 3) {
-            data_array_translated[i][j] = text_translated_array[index];
-            index++;
+    let accumulator = 0;
+    for (let i = 0; i < array.length; i++) {
+        for (let j = 0; j < array[i].text_array.length; j++) {
+            array[i].text_array[j].text = json.texto[accumulator].text;
+            accumulator++;
         }
     }
-    const lines = data_array_translated.map(innerArray => innerArray.join(';'));
-    const outputText = decodeHtmlEntities(lines.join(';\n') + ";");
+    console.log(array);
 }
 
 function closeBrowser(reference, _url) {
