@@ -29,7 +29,7 @@ data_text.forEach(element => {
     for (let i = 0; i < element.text_array.length; i++) {
         element.text_array[i] = {
             index_i: str_count,
-            // index_f: str_count + element.text_array[i].text.length;
+            index_f: 0,
             text: element.text_array[i]
         }
         str_count = str_count + element.text_array[i].text.length;
@@ -71,16 +71,19 @@ for (let j = 0; j < data_text.length; j++) {
     }
 }
 // FILTRAR ARRAYS SEM TEXTO
-for (let i = data_text.length - 1; i > 0; i--) {
+for (let i = data_text.length - 1; i >= 0; i--) {
     (data_text[i].text_array.length === 0) ? data_text.splice(i, 1) : null;
+    for (let j = 0; j < data_text[i].text_array.length; j++) {
+        data_text[i].text_array[j].index_f = data_text[i].text_array[j].text.length;        
+    }
 }
-console.log(data_text);
+console.log(JSON.parse(JSON.stringify(data_text)));
+
 
 const api_array = [];
 for (let i = 0; i < data_text.length; i++) {
     let sub_array = [];
     for (let j = 0; j < data_text[i].text_array.length; j++) {
-        // sub_array.push(data_text[i].text_array[j].index);
         sub_array.push(data_text[i].text_array[j].text);
     }
     api_array.push(sub_array);
@@ -111,6 +114,18 @@ async function getData(dado, array) {
         }
     }
     console.log(array);
+
+    for (let i = 7; i <= 7; i++) {
+        let element = data_array[1+(2*i)];
+        let temp_text = element;
+        for (let j = array[i].text_array.length - 1; j >= 0; j--) {
+            let temp_str_i = temp_text.slice(0, array[i].text_array[j].index_i);
+            let temp_str_f = temp_text.slice(array[i].text_array[j].index_i + array[i].text_array[j].index_f);
+            temp_text = temp_str_i + array[i].text_array[j].text + temp_str_f;
+        }
+        console.log(temp_text);
+    }
+
 }
 
 function closeBrowser(reference, _url) {
