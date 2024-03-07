@@ -116,19 +116,25 @@ async function getData(dado, array) {
         }
         data_array[1+(2*i)] = temp_string;
     }
-    console.log(data_array);
+
+    // let translated_text = data_array[0] + "," + data_array[1];
+    let translated_text = "";
+
+    for (let i = 2; i < data_array.length; i = i + 2) {       
+        translated_text = translated_text + ", " + data_array[i] + ", " + data_array[i+1]
+    }
+    
+    console.log({array: data_array, texto_traduzido: translated_text});
+
+
+    const text_send = `._princ (setq listinha ${translated_text})`
+    // Acad.Editor.executeCommand("._REGENALL");
+    Acad.Editor.executeCommand(`_princ (setq a "ola")`);
+    alert("foi");
 }
 
-function closeBrowser(reference, _url) {
-    window.URL.revokeObjectURL(reference);
-    Acad.Editor.executeCommand("regen");
-    Acad.Editor.executeCommand("._trdztxt");
+function closeBrowser() {
+ 
+    // Acad.Editor.executeCommand("._trdztxt");
 }
-
-function decodeHtmlEntities(html) {
-    var txt = document.createElement('textarea');
-    txt.innerHTML = html;
-    return txt.value;
-}
-
 
