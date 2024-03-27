@@ -84,9 +84,10 @@ for (let i = 0; i < data_text.length; i++) {
 const api_flatten = api_array.flat();
 // console.log(api_flatten);
 
-getData(api_flatten, data_text);
+getData(api_flatten, data_text, data_array);
 
-async function getData(dado, array) {
+
+async function getData(dado, array_sub, array_complete) {
 
     const options = {
         method: 'POST',
@@ -97,38 +98,47 @@ async function getData(dado, array) {
     }
     const resposta = await fetch("/api", options);
     const json = await resposta.json()
-    // console.log(json);
+
+    //CRIAÇÃO DE UMA ARRAY DA MESMA ESTRUTURA DA QUAL FOI CRIADA NA ROTINA LISP
+    const response_text_array = [];
     let accumulator = 0;
-    for (let i = 0; i < array.length; i++) {
-        for (let j = 0; j < array[i].text_array.length; j++) {
-            array[i].text_array[j] = json.texto[accumulator];
+    console.log({json: json, array_sub: array_sub, array_complete: array_complete});
+
+    for (let i = 0; i < array_sub.length; i++) {
+        response_text_array.push(array_sub[i].id);
+        let temp_string = array_complete[(i*2)+1];
+        for (let j = 0; j < array_sub[i].text_array.length; j++) {
+            if (json.texto[accumulator].text !== array_sub[i].text_array[j]) {
+                temp_string = temp_string.replace(array_sub[i].text_array[j] ,json.texto[accumulator].text)
+            }
             accumulator++;
         }
+        response_text_array.push(temp_string);
     }
+    console.log({response_text_array: response_text_array});
 
-    // console.log({data_original: data_array, data_trans: array, api_flat: api_flatten});
-    accumulator = 0;
-    for (let i = 0; i < array.length; i++) {
-        let temp_string = data_array[1+(2*i)];
-        for (let j = 0; j < array[i].text_array.length; j++) {
-            temp_string = temp_string.replace(api_flatten[accumulator], array[i].text_array[j].text);
-            accumulator++;
-        }
-        data_array[1+(2*i)] = temp_string;
+    //String de resposta com texto traduzido
+    let lsp_string = response_text_array.join("???").concat("???");
+    lsp_string = lsp_string.replaceAll(",", "<v>");
+    lsp_string = lsp_string.replaceAll("???", ",");
+    lsp_string = lsp_string.replaceAll("<v><v>", "<v>");
+    let lsp_strings_array = [];
+    let str_end;
+    const string_chunks_size = 200;
+    for (let i = 0; i < lsp_string.length; i = i + string_chunks_size) {
+        (i + string_chunks_size < lsp_string.length) ? (str_end = i + string_chunks_size) : (str_end = lsp_string.length);
+        let sub_string = lsp_string.substring(i, str_end);
+        lsp_strings_array.push(sub_string);
     }
-    console.log(data_array);
+    console.log(lsp_string);
+    console.log(lsp_strings_array);
+    closeBrowser(lsp_strings_array);
 }
 
-function closeBrowser(reference, _url) {
-    window.URL.revokeObjectURL(reference);
-    Acad.Editor.executeCommand("regen");
-    Acad.Editor.executeCommand("._trdztxt");
-}
-
-function decodeHtmlEntities(html) {
-    var txt = document.createElement('textarea');
-    txt.innerHTML = html;
-    return txt.value;
+function closeBrowser(lsp_string) {
+    lsp_string.forEach(element => Acad.Editor.executeCommand(`(setq api_string_response (strcat api_string_response "${element}"))`));
+    Acad.Editor.executeCommand(`(setvar "USERI1" 1)`);
+    Acad.Editor.executeCommand("trdztxt");
 }
 
 

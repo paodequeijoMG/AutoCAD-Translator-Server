@@ -10,10 +10,32 @@ app.listen(port, () => console.log(`Escutando na porta ${port}`));
 app.use(express.static('public'));
 app.use(express.json({ limit: '1mb'}));
 
-app.post('/api', async (request, response) => {  
+async function getUsageData() {
+    try {
+        const deepLAuthKey = process.env.API_KEY;
+
+        // Make a GET request to retrieve usage data
+        const response = await axios.get(
+            'https://api-free.deepl.com/v2/usage',
+            {
+                headers: {
+                    Authorization: `DeepL-Auth-Key ${deepLAuthKey}`,
+                },
+            }
+        );
+        return response.data; // Return the usage data
+    } catch (error) {
+        console.error('Error retrieving usage data:', error);
+        throw error;
+    }
+}
+
+app.post('/api', async (request, response) => {
     console.log('I got a request!');
     const data = request.body;
     console.log(data);
+    const data_count_info = await getUsageData();
+    console.log(data_count_info);
     //TRADUTOR API
     // Replace [yourAuthKey] with your actual DeepL API authorization key
     const deepLAuthKey = process.env.API_KEY;
@@ -61,8 +83,11 @@ app.post('/api', async (request, response) => {
         const translatedText = await translateText(data, sourceLang, targetLang);
         response.json({
             status: 'sucesso',
-            texto: translatedText
+            texto: translatedText,
+            data_usage: data_count_info.character_count,
+            data_limit: data_count_info.character_limit
         });
+        console.log(translatedText);
     } catch (error) {
         // Handle translation error
         console.error('Translation error:', error);
