@@ -130,6 +130,7 @@ async function getData(dado, array_sub, array_complete) {
         let sub_string = lsp_string.substring(i, str_end);
         lsp_strings_array.push(sub_string);
     }
+<<<<<<< HEAD
     console.log(lsp_string);
     console.log(lsp_strings_array);
     closeBrowser(lsp_strings_array);
@@ -142,3 +143,27 @@ function closeBrowser(lsp_string) {
 }
 
 
+=======
+
+    // let translated_text = data_array[0] + "," + data_array[1];
+    let translated_text = "";
+
+    for (let i = 2; i < data_array.length; i = i + 2) {       
+        translated_text = translated_text + ", " + data_array[i] + ", " + data_array[i+1]
+    }
+    
+    console.log({array: data_array, texto_traduzido: translated_text});
+
+
+    const text_send = `._princ (setq listinha ${translated_text})`
+    // Acad.Editor.executeCommand("._REGENALL");
+    Acad.Editor.executeCommand(`_princ (setq a "ola")`);
+    alert("foi");
+}
+
+function closeBrowser() {
+ 
+    // Acad.Editor.executeCommand("._trdztxt");
+}
+
+>>>>>>> e3c265e79177bc2ee3b95f532ce014854fc8b9d6
