@@ -30,7 +30,6 @@ async function getUsageData() {
     }
 }
 
-<<<<<<< HEAD
 app.post('/fetch-data-usage', async (req, response) => {
     const data_count_info = await getUsageData();
     console.log(data_count_info);
@@ -41,8 +40,6 @@ app.post('/fetch-data-usage', async (req, response) => {
     });
 });
 
-=======
->>>>>>> daa1b7b55fac292d7154bbadcec7351f930a6df8
 app.post('/api', async (request, response) => {
     console.log('I got a request!');
     const data = request.body;
