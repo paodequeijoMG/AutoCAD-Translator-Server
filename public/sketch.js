@@ -96,19 +96,10 @@ async function getData(dado, array_sub, array_complete) {
     //CRIAÇÃO DE UMA ARRAY DA MESMA ESTRUTURA DA QUAL FOI CRIADA NA ROTINA LISP
     const response_text_array = [];
     let accumulator = 0;
-<<<<<<< HEAD
     // console.log({json: json, array_sub: array_sub, array_complete: array_complete});
-
     for (let i = 0; i < array_sub.length; i++) {
         response_text_array.push(array_sub[i].id);
         let temp_string = array_complete[(i*2)+1].join(";");
-=======
-    console.log({json: json, array_sub: array_sub, array_complete: array_complete});
-
-    for (let i = 0; i < array_sub.length; i++) {
-        response_text_array.push(array_sub[i].id);
-        let temp_string = array_complete[(i*2)+1];
->>>>>>> daa1b7b55fac292d7154bbadcec7351f930a6df8
         for (let j = 0; j < array_sub[i].text_array.length; j++) {
             if (json.texto[accumulator].text !== array_sub[i].text_array[j]) {
                 temp_string = temp_string.replace(array_sub[i].text_array[j] ,json.texto[accumulator].text)
@@ -117,7 +108,6 @@ async function getData(dado, array_sub, array_complete) {
         }
         response_text_array.push(temp_string);
     }
-<<<<<<< HEAD
     // console.log({response_text_array: response_text_array});
 
     //String de resposta com texto traduzido
@@ -135,57 +125,3 @@ function closeBrowser(lsp_string) {
     }
     Acad.Editor.executeCommand("txtcp");
 }
-=======
-    console.log({response_text_array: response_text_array});
-
-    //String de resposta com texto traduzido
-    let lsp_string = response_text_array.join("???").concat("???");
-    lsp_string = lsp_string.replaceAll(",", "<v>");
-    lsp_string = lsp_string.replaceAll("???", ",");
-    lsp_string = lsp_string.replaceAll("<v><v>", "<v>");
-    let lsp_strings_array = [];
-    let str_end;
-    const string_chunks_size = 200;
-    for (let i = 0; i < lsp_string.length; i = i + string_chunks_size) {
-        (i + string_chunks_size < lsp_string.length) ? (str_end = i + string_chunks_size) : (str_end = lsp_string.length);
-        let sub_string = lsp_string.substring(i, str_end);
-        lsp_strings_array.push(sub_string);
-    }
-<<<<<<< HEAD
-    console.log(lsp_string);
-    console.log(lsp_strings_array);
-    closeBrowser(lsp_strings_array);
-}
-
-function closeBrowser(lsp_string) {
-    lsp_string.forEach(element => Acad.Editor.executeCommand(`(setq api_string_response (strcat api_string_response "${element}"))`));
-    Acad.Editor.executeCommand(`(setvar "USERI1" 1)`);
-    Acad.Editor.executeCommand("trdztxt");
-}
-
-
-=======
-
-    // let translated_text = data_array[0] + "," + data_array[1];
-    let translated_text = "";
-
-    for (let i = 2; i < data_array.length; i = i + 2) {       
-        translated_text = translated_text + ", " + data_array[i] + ", " + data_array[i+1]
-    }
-    
-    console.log({array: data_array, texto_traduzido: translated_text});
-
-
-    const text_send = `._princ (setq listinha ${translated_text})`
-    // Acad.Editor.executeCommand("._REGENALL");
-    Acad.Editor.executeCommand(`_princ (setq a "ola")`);
-    alert("foi");
-}
-
-function closeBrowser() {
- 
-    // Acad.Editor.executeCommand("._trdztxt");
-}
-
->>>>>>> e3c265e79177bc2ee3b95f532ce014854fc8b9d6
->>>>>>> daa1b7b55fac292d7154bbadcec7351f930a6df8
