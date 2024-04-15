@@ -126,5 +126,3 @@ function closeBrowser(lsp_string) {
     }
     Acad.Editor.executeCommand("txtcp");
 }
-
-
