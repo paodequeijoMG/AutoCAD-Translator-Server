@@ -2,33 +2,28 @@ const data_querry = "dados";
 const fullUrlWithQuery = window.location.origin + "/" + window.location.search;
 const urlParams = new URLSearchParams(window.location.search);
 const arrayString = urlParams.get(data_querry);
-const url = `${window.location.origin}/?${data_querry}=${arrayString}`;
-let data_array = arrayString.split(',');
+// console.log(arrayString);
+
+// preparação da string para tradução
+let data_array = arrayString.split('§');
 data_array.pop();
-data_array.forEach(element => {
-    if (element.length > 1) {
-        let element_splited = element.split(";");
-        element = element_splited;
-    }
-});
-console.log(data_array);
+// console.log(JSON.parse(JSON.stringify(data_array)));
+for (let i = 1; i < data_array.length; i+= 2) {
+    data_array[i] = data_array[i].split(";")
+}
+// console.log(data_array);
 
 // text_array
+const deepCopy = (arr) => {
+    return arr.map(item => Array.isArray(item) ? deepCopy(item) : item);
+};
 const data_text = [];
 for (let i = 0; i < data_array.length; i = i + 2) {
     data_text[i/2] = {
         id: data_array[i],
-        text_array: data_array[i+1]
+        text_array: deepCopy(data_array[i+1])
     }
 }
-// console.log(JSON.parse(JSON.stringify(data_text)));
-
-data_text.forEach((element, index) => data_text[index].text_array = element.text_array.split(';'));
-data_text.forEach(element => {
-    for (let i = 0; i < element.text_array.length; i++) {
-        element.text_array[i] = element.text_array[i]
-    }
-});
 // console.log(JSON.parse(JSON.stringify(data_text)));
 
 // ----REGEX----
@@ -80,13 +75,13 @@ for (let i = 0; i < data_text.length; i++) {
     }
     api_array.push(sub_array);
 }
-
 const api_flatten = api_array.flat();
 // console.log(api_flatten);
 
-getData(api_flatten, data_text);
+getData(api_flatten, data_text, data_array);
 
-async function getData(dado, array) {
+
+async function getData(dado, array_sub, array_complete) {
 
     const options = {
         method: 'POST',
@@ -97,38 +92,39 @@ async function getData(dado, array) {
     }
     const resposta = await fetch("/api", options);
     const json = await resposta.json()
-    // console.log(json);
+
+    //CRIAÇÃO DE UMA ARRAY DA MESMA ESTRUTURA DA QUAL FOI CRIADA NA ROTINA LISP
+    const response_text_array = [];
     let accumulator = 0;
-    for (let i = 0; i < array.length; i++) {
-        for (let j = 0; j < array[i].text_array.length; j++) {
-            array[i].text_array[j] = json.texto[accumulator];
+    // console.log({json: json, array_sub: array_sub, array_complete: array_complete});
+
+    for (let i = 0; i < array_sub.length; i++) {
+        response_text_array.push(array_sub[i].id);
+        let temp_string = array_complete[(i*2)+1].join(";");
+        for (let j = 0; j < array_sub[i].text_array.length; j++) {
+            if (json.texto[accumulator].text !== array_sub[i].text_array[j]) {
+                temp_string = temp_string.replace(array_sub[i].text_array[j] ,json.texto[accumulator].text)
+            }
             accumulator++;
         }
+        response_text_array.push(temp_string);
     }
+    // console.log({response_text_array: response_text_array});
 
-    // console.log({data_original: data_array, data_trans: array, api_flat: api_flatten});
-    accumulator = 0;
-    for (let i = 0; i < array.length; i++) {
-        let temp_string = data_array[1+(2*i)];
-        for (let j = 0; j < array[i].text_array.length; j++) {
-            temp_string = temp_string.replace(api_flatten[accumulator], array[i].text_array[j].text);
-            accumulator++;
-        }
-        data_array[1+(2*i)] = temp_string;
-    }
-    console.log(data_array);
+    //String de resposta com texto traduzido
+    const lsp_string = response_text_array.join("§").concat("§");
+    // console.log(lsp_string);
+    closeBrowser(lsp_string);
 }
 
-function closeBrowser(reference, _url) {
-    window.URL.revokeObjectURL(reference);
-    Acad.Editor.executeCommand("regen");
-    Acad.Editor.executeCommand("._trdztxt");
-}
-
-function decodeHtmlEntities(html) {
-    var txt = document.createElement('textarea');
-    txt.innerHTML = html;
-    return txt.value;
+function closeBrowser(lsp_string) {
+    Acad.Editor.executeCommand(`(setq api_string_response "")`);
+    let str_size = 200;
+    let i = 0;
+    for (i = 0; i < lsp_string.length; i += str_size) {
+        Acad.Editor.executeCommand(`(setq api_string_response (strcat api_string_response "${lsp_string.slice(i, i + str_size)}"))`);
+    }
+    Acad.Editor.executeCommand("txtcp");
 }
 
 

@@ -15,6 +15,25 @@ for (let i = 0; i < src_languages_options.length; i++) {
 // CRIAÇÃO DE DUAS LISTAS PARA SELEÇÃO DA LINGUA FONTE E LINGUA PARA TRADUÇÃO
 const src_languages_dom = tabListCreator(src_languages_options, "src_language_tab", "src", src_select_language);
 const trg_languages_dom = tabListCreator(trg_languages_options, "trg_language_tab", "trg", trg_select_language);
+fetchDataUsage();
+
+
+async function fetchDataUsage() {
+    const options = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }
+    const resposta = await fetch("/fetch-data-usage", options);
+    const data = await resposta.json();
+    console.log(data);
+
+    const p_char_used = document.getElementById('char_used');
+    const p_char_limit = document.getElementById('char_limit');
+    p_char_limit.innerText = data.data_limit;
+    p_char_used.innerText = data.data_usage;
+}
 
 function SaveState() {
     let obj_selected = "";
