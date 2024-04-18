@@ -40,7 +40,7 @@ app.post('/fetch-data-usage', async (req, response) => {
     });
 });
 
-app.post('/api', async (request, response) => {
+app.post('https://autocad-translator-server.vercel.app/api', async (request, response) => {
     console.log('I got a request!');
     const data = request.body;
     console.log(data);

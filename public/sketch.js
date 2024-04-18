@@ -90,7 +90,7 @@ async function getData(dado, array_sub, array_complete) {
         },
         body: JSON.stringify(dado)
     }
-    const resposta = await fetch("/api", options);
+    const resposta = await fetch("https://autocad-translator-server.vercel.app/api", options);
     const json = await resposta.json()
 
     //CRIAÇÃO DE UMA ARRAY DA MESMA ESTRUTURA DA QUAL FOI CRIADA NA ROTINA LISP
