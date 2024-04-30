@@ -4,11 +4,13 @@ const app = express();
 const axios = require('axios');
 const querystring = require('querystring');
 const port = process.env.PORT || 5355;
+const cors = require('cors');
 require('dotenv').config();
 
 app.listen(port, () => console.log(`Escutando na porta ${port}`));
 app.use(express.static('public'));
 app.use(express.json({ limit: '1mb'}));
+app.use(cors());
 
 async function getUsageData() {
     try {
